@@ -1,0 +1,32 @@
+<% if user_signed_in? %> 
+  <div> Welcome <%= current_user.email %> </div> 
+
+  <h1> <%= current_user.following.count%> </h1> <h3>following<h3>
+  <h1> <%= current_user.followers.count%> </h1> <h3>followers<h3>
+
+  <% if current_user.picture.present? %>
+    <%= image_tag current_user.picture %>
+  <% end %>
+
+  <% @users.each do |user| %>
+    <div>
+      <%= user.name %> | <%= user.username %>
+
+      <% if current_user.following.include?(user) %>
+        <%= button_to "Unfollow", unfollow_user_path(user), method: :post %>
+      <% else %>
+        <%= button_to "Follow", follow_user_path(user), method: :post %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div> 
+    <br>
+    user name = <%= current_user.username %>
+  </div>
+
+  <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
+  <%= button_to "Edit Profile", edit_user_registration_path, method: :get %>
+<% else %>
+  <%= button_to "Sign in", new_user_session_path %> 
+<% end %>
