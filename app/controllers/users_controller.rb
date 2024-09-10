@@ -1,8 +1,11 @@
 class UsersController < ApplicationController
+  before_action :authenticate_user!
+
   def show
-    user = User.find_by(id: params[:id])
-    @followers = user.followers
-    @following = user.followers
+    @user = User.find_by(id: params[:id])
+    @followers = @user.followers
+    @following = @user.following
+    @mutuals = current_user.following & @followers unless current_user == @user
   end
 
   def follow(target_user = nil)
@@ -15,9 +18,5 @@ class UsersController < ApplicationController
     target_user ||= User.find_by(id: params[:id])
     current_user.following.delete(target_user)
     redirect_to '/app/home'
-  end
-
-  def following
-  #   following.include?(User.find_by(id: params[:id]))
   end
 end

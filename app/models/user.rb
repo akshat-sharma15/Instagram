@@ -29,4 +29,10 @@ class User < ApplicationRecord
     user.save
     user
   end
+
+  private
+
+  def following?(other_user)
+    following.include?(other_user)
+  end
 end
